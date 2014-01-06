@@ -1,0 +1,3 @@
+post-build=Samsung/cm_tass/tass:4.2.2/JDQ39E/eng.jenkins.20131008.204017:userdebug/test-keys
+post-timestamp=1381257687
+pre-device=tass

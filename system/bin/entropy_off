@@ -1,0 +1,68 @@
+#!/system/bin/sh
+
+#======== Copyright (C) 2013 Salah Abouabdallah(Slaid480)===============#
+ 
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+ 
+#  You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+#=======================================================================#
+ 
+clear
+   echo "";
+   echo "========================================";
+   echo "= Fly-On entropy de-activation script  =";
+   echo "=            Slaid480@ XDA 2013        =";
+   echo "========================================";
+sleep 1
+   echo ""
+   echo -n "Do you want to de-activate the entropy generator engine? [ Yes = 1 | No = 2 ]: "
+read option2
+if [ $option2 -ne 1 ]; then
+   echo ""
+   echo "Your choice is No,exiting out now..."
+sleep 1
+exit 0
+else
+   echo ""
+   echo "De-activating the entropy generator engine..."
+sleep 1
+busybox mount -o rw,remount /system
+if [ -e /system/bin/qrngd.bak ]; then
+busybox mv -f /system/bin/qrngd.bak /system/bin/qrngd
+busybox chmod -f 755 /system/bin/qrngd
+busybox chown -f 0.0 /system/bin/qrngd
+fi
+if [ -e /system/xbin/qrngd.bak ]; then
+busybox mv -f /system/xbin/qrngd.bak /system/xbin/qrngd
+busybox chmod -f 755 /system/xbin/qrngd
+busybox chown -f 0.0 /system/xbin/qrngd
+fi
+if [ -e /system/bin/haveged.bak ]; then
+busybox mv -f /system/bin/haveged.bak /system/bin/haveged
+busybox chmod -f 755 /system/bin/haveged
+busybox chown -f 0.0 /system/bin/haveged
+fi
+if [ -e /system/xbin/haveged.bak ]; then
+busybox mv -f /system/xbin/haveged.bak /system/xbin/haveged
+busybox chmod -f 755 /system/xbin/haveged
+busybox chown -f 0.0 /system/xbin/haveged
+fi
+busybox rm -f /data/rngd.pid
+busybox rm -f /system/xbin/rngd
+busybox rm -f /system/xbin/entro
+busybox rm -f /system/etc/init.d/entropy
+sleep 1
+   echo ""
+   echo "Your device will reboot shortly..."
+sleep 1
+reboot
+busybox reboot
+fi

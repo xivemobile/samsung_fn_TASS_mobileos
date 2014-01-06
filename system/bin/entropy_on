@@ -1,0 +1,92 @@
+#!/system/bin/sh
+
+#============ Copyright (C) 2013 Salah Abouabdallah(Slaid480)===========#
+ 
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+ 
+#  You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+#=======================================================================#
+
+ 
+clear
+   echo "";
+   echo "========================================";
+   echo "=    Fly-On entropy activation script  =";
+   echo "=           Slaid480@ XDA 2013         =";
+   echo "========================================";
+sleep 1
+   echo ""
+   echo -n "Do you want to activate the entropy generator engine? [ Yes = 1 | No = 2 ]: "
+read option2
+if [ $option2 -ne 1 ]; then
+   echo ""
+   echo "Your choice is No,exiting out now..."
+sleep 1
+exit 0
+else
+   echo ""
+   echo "Activating the entropy generator engine "
+sleep 1
+busybox mount -o rw,remount /system
+if [ -e /system/bin/qrngd ]; then
+busybox mv -f /system/bin/qrngd /system/bin/qrngd.bak
+fi
+if [ -e /system/xbin/qrngd ]; then
+busybox mv -f /system/xbin/qrngd /system/xbin/qrngd.bak
+fi
+if [ -e /system/bin/haveged ]; then
+busybox rm -f /data/rngd.pid
+busybox pkill /system/bin/haveged
+busybox mv -f /system/bin/haveged /system/bin/haveged.bak
+fi
+if [ -e /system/xbin/haveged ]; then
+busybox rm -f /data/rngd.pid
+busybox pkill /system/xbin/haveged
+busybox mv -f /system/xbin/haveged /system/xbin/haveged.bak
+fi
+busybox cp -f /system/etc/rngd/rngd /system/xbin
+busybox cp -f /system/etc/rngd/entro /system/xbin
+busybox chmod -f 755 /system/xbin/rngd
+busybox chmod -f 755 /system/xbin/entro
+busybox chown -f 0.0 /system/xbin/rngd
+busybox chown -f 0.0 /system/xbin/entro
+rngd -s 1024 -t 2 -W 75
+renice 4 `pidof rngd`
+fi
+   echo ""
+   echo -n "Do you want rngd binary to run at boot ? [ Yes = 1 | No = 2 ]: "
+read option2
+if [ $option2 -ne 1 ]; then
+   echo ""
+   echo "Rngd will NOT run at boot..."
+sleep 1
+   echo ""
+   echo "Rngd binary is now active until you reboot..."
+sleep 1
+exit 0
+else
+   echo ""
+   echo "Activating rngd binary to run at boot..."
+sleep 1
+busybox cp -f /system/etc/rngd/entropy /system/etc/init.d
+busybox rm -f /data/Fly-On/01entropy.log
+busybox touch /data/Fly-On/01entropy.log
+busybox chmod -f 755 /system/etc/init.d/entropy
+busybox chown -f 0.0 /system/etc/init.d/entropy
+   echo ""
+   echo "Rngd binary will now run at boot!"
+sleep 1
+   echo ""
+   echo "Your device will reboot shortly..."
+sleep 1
+reboot
+busybox reboot
+fi
