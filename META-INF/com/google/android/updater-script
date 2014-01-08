@@ -1,28 +1,50 @@
-ui_print("***");
-ui_print("FutureNext - The perfect ROM ever");
-ui_print("Based on AndroidARMv6 team's CM10.1");
-ui_print("Version: 4.5.1 (26/12/2013)");
-ui_print("Base version: Stable (08/10/2013)");
-ui_print("Installation... please wait");
-ui_print("If the bar doesn't move, is normal");
-ui_print("I hope you like it!");
 ui_print(" ");
+ui_print(" ");
+ui_print("************************");
+ui_print("Xive!MobileOS  Installer");
+ui_print("Build4: Samsung GT-S5570");
+ui_print("************************");
+ui_print(" ");
+ui_print("(C) 2014 by devXive and ");
+ui_print("WALZ.ag, Dep: RAD");
+ui_print(" ");
+ui_print("Maintainer: Lahmizzar");
+ui_print("Sounddesigner: Samirah");
+ui_print(" ");
+ui_print("Installation,");
+ui_print("please wait...");
+ui_print(" ");
+
 assert(getprop("ro.product.device") == "tass" || getprop("ro.build.product") == "tass" || 
        getprop("ro.product.device") == "GT-S5570" || getprop("ro.build.product") == "GT-S5570");
+
+show_progress(0.200000, 10);
+
 mount("ext4", "EMMC", "/dev/block/stl12", "/system");
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
 set_perm(0, 0, 0777, "/tmp/backuptool.sh");
 set_perm(0, 0, 0644, "/tmp/backuptool.functions");
 run_program("/tmp/backuptool.sh", "backup");
+
+# Format_system with dev blocks as set in recovery.fstab file for TASS Recovery
+show_progress(0.200000, 20);
 unmount("/system");
-show_progress(0.500000, 0);
+
+# Install system
+show_progress(0.200000, 30);
 format("ext4", "EMMC", "/dev/block/stl12", "0", "/system");
 mount("ext4", "EMMC", "/dev/block/stl12", "/system");
 package_extract_dir("system", "/system");
+
+# Symlinks
+show_progress(0.200000, 40);
+
 symlink("/system/xbin/su", "/system/bin/su");
+
 symlink("Roboto-Bold.ttf", "/system/fonts/DroidSans-Bold.ttf");
 symlink("Roboto-Regular.ttf", "/system/fonts/DroidSans.ttf");
+
 symlink("busybox", "/system/xbin/[", "/system/xbin/[[",
         "/system/xbin/adjtimex", "/system/xbin/arp", "/system/xbin/ash",
         "/system/xbin/awk", "/system/xbin/base64", "/system/xbin/basename",
@@ -98,8 +120,14 @@ symlink("busybox", "/system/xbin/[", "/system/xbin/[[",
         "/system/xbin/xargs", "/system/xbin/xz", "/system/xbin/xzcat",
         "/system/xbin/yes",
         "/system/xbin/zcat");
+
+show_progress(0.200000, 50);
+
 symlink("logcat", "/system/bin/lolcat");
 symlink("mksh", "/system/bin/sh");
+
+show_progress(0.200000, 60);
+
 symlink("toolbox", "/system/bin/cat", "/system/bin/chmod",
         "/system/bin/chown", "/system/bin/cmp", "/system/bin/cp",
         "/system/bin/date", "/system/bin/dd", "/system/bin/df",
@@ -122,6 +150,9 @@ symlink("toolbox", "/system/bin/cat", "/system/bin/chmod",
         "/system/bin/umount", "/system/bin/uptime", "/system/bin/vmstat",
         "/system/bin/watchprops",
         "/system/bin/wipe");
+
+# Permissions
+show_progress(0.200000, 70);
 set_perm_recursive(0, 0, 0755, 0644, "/system");
 set_perm_recursive(0, 0, 0755, 0755, "/system/addon.d");
 set_perm_recursive(0, 2000, 0755, 0755, "/system/bin");
@@ -141,8 +172,6 @@ set_perm(0, 0, 06755, "/system/xbin/librank");
 set_perm(0, 0, 06755, "/system/xbin/procmem");
 set_perm(0, 0, 06755, "/system/xbin/procrank");
 set_perm(0, 0, 06755, "/system/xbin/su");
-show_progress(0.200000, 0);
-show_progress(0.200000, 10);
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
 set_perm(0, 0, 0777, "/tmp/backuptool.sh");
@@ -150,9 +179,21 @@ set_perm(0, 0, 0644, "/tmp/backuptool.functions");
 run_program("/tmp/backuptool.sh", "restore");
 delete("/system/bin/backuptool.sh");
 delete("/system/bin/backuptool.functions");
-show_progress(0.200000, 10);
+
+show_progress(0.200000, 80);
 assert(package_extract_file("boot.img", "/tmp/boot.img"),
        write_raw_image("/tmp/boot.img", "boot"),
        delete("/tmp/boot.img"));
-show_progress(0.100000, 0);
+show_progress(0.200000, 90);
 unmount("/system");
+show_progress(1.000000, 0);
+
+ui_print(" ");
+ui_print(" ");
+ui_print(" ");
+ui_print(" ");
+ui_print("************************");
+ui_print(" Thanks for installing  ");
+ui_print("     Xive!MobileOS      ");
+ui_print(" visit us @ devxive.com ");
+ui_print("************************");
