@@ -6,6 +6,9 @@ Visit http://github.com/xivemobile for full changelogs and git access.
 CHANGELOG (notable new features)
 ---------
 
+### 4.5.1.2
+* Common: Move big audio and image files to sdcard (external package) to fix OOS Bug
+
 ### 4.5.1.1
 * Common: Remove Talk App
 
